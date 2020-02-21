@@ -1,12 +1,12 @@
 const jwt = require('jwt-simple');
 const passport = require('passport');
 const User = require('../models/user');
-const config = require('../config/config');
+const SECRET = process.env.SECRET;
 
 // utility function: User ID + Timestamp + Secret String = JSON Web Token (JWT)
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
-  return jwt.encode({ sub: user._id, iat: timestamp }, config.secret);
+  return jwt.encode({ sub: user._id, iat: timestamp }, SECRET);
   // sub: subject (the very specific user)
   // iat: issued at time
 }
@@ -80,9 +80,6 @@ exports.signin = function(req, res, next) {
   });
 };
 
-
-// // https://github.com/jaredhanson/passport-local/issues/4
-
 // exports.signin = function(req, res, next) {
 //   passport.authenticate('local', { session: false }, function(err, user, info) {
 
@@ -103,7 +100,6 @@ exports.signin = function(req, res, next) {
 
 /**
  * Verify if the JWT in local storage is valid
- *
  * @param req
  * @param res
  * @param next
